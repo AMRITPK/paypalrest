@@ -91,7 +91,7 @@ console.log(token);
                 state: 'CA' } } } ],
      note_to_payer: 'Contact us for any questions on your order.',
      redirect_urls: 
-      { return_url: 'https://www.paypal-proserv.com/testingamr.php?url=https://www.amazon.com/gizmos',
+      { return_url: 'https://www.paypal-proserv.com/testingamr_bak.php?url=https://www.amazon.com/gizmos',
         cancel_url: 'http://www.hawaii.com' } },
         //''myapp://returnApp?status=1'  
         //https://www.paypal-proserv.com/testingamr.php?url=myapp%3A%2F%2FreturnApp%3Fstatus%3D1%0A
