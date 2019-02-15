@@ -17,7 +17,7 @@ app.get('/create123',(req,res)=> {
 
 app.post('/create',(req,res)=> {
 var request = require("request");
-console.log("amrrrr",req.post);
+console.log("amrrrr",req.body);
 var options = { method: 'POST',
   url: 'https://api.sandbox.paypal.com/v1/oauth2/token',
   headers:
@@ -59,27 +59,27 @@ console.log(token);
                 handling_fee: '1.00',
                 shipping_discount: '-1.00',
                 insurance: '0.01' } },
-          description: req.post.description||'This is the payment transaction description.',
-          custom: req.post.custom||'EBAY_EMS_90048630024435',
-          invoice_number: req.post.invoice_number||token.substring(10),
+          description: req.body.description||'This is the payment transaction description.',
+          custom: req.body.custom||'EBAY_EMS_90048630024435',
+          invoice_number: req.body.invoice_number||token.substring(10),
           payment_options: { allowed_payment_method: 'INSTANT_FUNDING_SOURCE' },
           soft_descriptor: 'ECHI5786786',
           item_list: 
            { items: 
               [ { name: 'hat',
-                  description: req.post.description||'Brown color hat',
+                  description: req.body.description||'Brown color hat',
                   quantity: '5',
                   price: '3',
                   tax: '0.01',
                   sku: '1',
-                  currency: eq.post.currency||'INR' },
+                  currency: req.body.currency||'INR' },
                 { name: 'handbag',
                   description: 'Black color hand bag',
                   quantity: '1',
                   price: '15',
                   tax: '0.02',
                   sku: 'product34',
-                  currency: req.post.currency||'INR' } ],
+                  currency: req.body.currency||'INR' } ],
              shipping_address: 
               { recipient_name: 'Hello World',
                 line1: '4thFloor',
@@ -91,8 +91,8 @@ console.log(token);
                 state: 'CA' } } } ],
      note_to_payer: 'Contact us for any questions on your order.',
      redirect_urls: 
-      { return_url: req.post.return_url||'https://www.paypal-proserv.com/testingamr_bak.php?url=https://www.amazon.in/gizmos',
-        cancel_url: req.post.cancel_url||'http://www.hawaii.com' } },
+      { return_url: req.body.return_url||'https://www.paypal-proserv.com/testingamr_bak.php?url=https://www.amazon.in/gizmos',
+        cancel_url: req.body.cancel_url||'http://www.hawaii.com' } },
         //''myapp://returnApp?status=1'  
         //https://www.paypal-proserv.com/testingamr.php?url=myapp%3A%2F%2FreturnApp%3Fstatus%3D1%0A
         //'http://10.232.196.155:3000/redirect-server'
