@@ -17,7 +17,7 @@ app.get('/create123',(req,res)=> {
 
 app.post('/create',(req,res)=> {
 var request = require("request");
-
+console.log("amrrrr",req.post);
 var options = { method: 'POST',
   url: 'https://api.sandbox.paypal.com/v1/oauth2/token',
   headers:
