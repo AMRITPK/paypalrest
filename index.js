@@ -1,11 +1,9 @@
 const express = require('express')
+var bodyParser = require('body-parser')
 const app = express()
 const port = process.env.PORT || 5000
 var request = require("request");
-app.configure(function(){
-  app.use(express.bodyParser());
-  app.use(app.router);
-});
+app.use(bodyParser.json())
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/redirect-server', function(req, res) {
   console.log("in here in red 302");
