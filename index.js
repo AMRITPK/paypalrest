@@ -50,6 +50,11 @@ console.log(token);
   body: 
    { intent: 'sale',
      payer: { payment_method: 'paypal' },
+     
+  application_context:{
+   
+    "landing_page":req.body.landing_page||"Login"
+  },
      transactions: 
       [ { amount: 
            { total: '30.11',
