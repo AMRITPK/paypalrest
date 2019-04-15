@@ -4,6 +4,8 @@ const app = express()
 const port = process.env.PORT || 5000
 var request = require("request");
 app.use(bodyParser.json())
+var cors = require('cors')
+app.use(cors())
 app.get('/', (req, res) => res.send('Hello World!'));
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
