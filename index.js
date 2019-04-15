@@ -12,7 +12,10 @@ app.post("/juspaycreate",function(req,res){
 //expects customer_id,customer_email,return_url,additional_data,experience_id
 //customer_id
 //risk_id
-
+if(req.body.security!="amrit"){
+  res.send("security failed");
+  throw ("some error");
+}
   var options = { method: 'POST',
     url: 'https://sandbox.juspay.in/ecr/orders',
     headers: 
@@ -36,10 +39,9 @@ app.post("/juspaycreate",function(req,res){
 
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-    if(JSON.parse(body).security!="amrit"){
-      res.send("security failed");
-      throw ("some error");
-    }
+    console.log(body);
+    console.log(JSON.parse(body));
+
     console.log(body);
     let orderid=JSON.parse(body).order_id;
     console.log(orderid);
