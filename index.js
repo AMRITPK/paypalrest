@@ -36,7 +36,9 @@ app.post("/juspaycreate",function(req,res){
 
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-
+    if(JSON.parse(body).security=="amrit"){
+      res.send("security failed");
+    }
     console.log(body);
     let orderid=JSON.parse(body).order_id;
     console.log(orderid);
