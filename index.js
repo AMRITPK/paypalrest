@@ -4,7 +4,88 @@ const app = express()
 const port = process.env.PORT || 5000
 var request = require("request");
 app.use(bodyParser.json())
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', (req, res) => res.send('Hello World!'));
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+app.post("/juspaycreate",function(req,res){
+//expects customer_id,customer_email,return_url,additional_data,experience_id
+//customer_id
+//risk_id
+
+  var options = { method: 'POST',
+    url: 'https://sandbox.juspay.in/ecr/orders',
+    headers: 
+    { 'cache-control': 'no-cache',
+      Authorization: 'Basic QzZFOEU2QkU3NkI0NEExQkUxMjA5QTg1Mjk4OEIwOg==',
+      'Content-Type': 'application/x-www-form-urlencoded' },
+    form: 
+    { order_id: 'paypal_test_code_'+getRandomInt(10000),
+      amount: '1.00',
+      currency: 'INR',
+      customer_id: req.body.customer_id||'cst_zdwpilklo6wa6sfa',
+      customer_email: req.body.customer_email||'amritpk@gmail.com',
+      return_url: req.body.return_url||'http://www.google.co.in',
+      'metadata.PAYPAL:last_name': 'gd',
+      'metadata.PAYPAL:landing_page': 'Billing',
+      'metadata.PAYPAL:country_code': 'IN',
+      'metadata.PAYPAL:additional_data': req.body.additional_data||'[{"key": "sender_account_id","value": "10001"},{"key":"sender_first_name","value": "John"},{"key": "sender_country_code","value": "US"},{"key": "sender_popularity_score","value": "low"}]',
+      'metadata.PAYPAL:phone_number': '7200058446',
+      'metadata.PAYPAL:experience_id':  req.body.experience_id||'XP-3NYT-KYZG-UY6Z-MXLN',
+      description: 'This is BA for Juspay merchant'} };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    console.log(body);
+    let orderid=JSON.parse(body).order_id;
+    console.log(orderid);
+    var options = { method: 'GET',
+    url: (req.body.customer_id)?'https://sandbox.juspay.in/customers/'+req.body.customer_id+'/wallets' :'https://sandbox.juspay.in/customers/cst_zdwpilklo6wa6sfa/wallets',
+    headers: 
+    { 'cache-control': 'no-cache',
+      Authorization: 'Basic QzZFOEU2QkU3NkI0NEExQkUxMjA5QTg1Mjk4OEIwOg==',
+      'Content-Type': 'application/x-www-form-urlencoded' },
+    form: false };
+
+    request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    console.log(body);
+    console.log(JSON.parse(body).list);
+    console.log(JSON.parse(body).list.pop());
+      let tokenID=JSON.parse(body).list.pop().token;
+      console.log(tokenID);
+      var options = { method: 'POST',
+        url: 'https://sandbox.juspay.in/txns',
+        headers: 
+        { 'cache-control': 'no-cache',
+          Authorization: 'Basic QzZFOEU2QkU3NkI0NEExQkUxMjA5QTg1Mjk4OEIwOg==',
+          'Content-Type': 'application/x-www-form-urlencoded' },
+        form: 
+        { order_id: orderid,
+          merchant_id: 'dummy-merchant',
+          payment_method_type: 'WALLET',
+          payment_method: 'PAYPAL',
+          redirect_after_payment: 'true',
+          format: 'json',
+          direct_wallet_token: tokenID,
+          risk_id: req.body.risk_id||'4094eca42c47465a9a74d366d8c3fdfb'
+         } };
+
+      request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+        res.send(body);
+      });
+
+    });
+
+  });
+
+})
+
 app.get('/redirect-server', function(req, res) {
   console.log("in here in red 302");
   res.redirect(302,'myapp://returnApp?status=1');
