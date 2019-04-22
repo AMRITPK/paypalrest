@@ -10,13 +10,53 @@ app.get('/', (req, res) => res.send('Hello World!'));
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+app.post("/juspaycreateonly",function(req,res){
+  //expects customer_id,customer_email,return_url,additional_data,experience_id
+  //customer_id
+  //risk_id
+  if(req.body.security!="amrit"){
+    res.send("security failed");
+    throw ("  ");
+  }
+    var options = { method: 'POST',
+      url: 'https://sandbox.juspay.in/ecr/orders',
+      headers: 
+      { 'cache-control': 'no-cache',
+        Authorization: 'Basic QzZFOEU2QkU3NkI0NEExQkUxMjA5QTg1Mjk4OEIwOg==',
+        'Content-Type': 'application/x-www-form-urlencoded' },
+      form: 
+      { order_id: 'paypal_test_code_'+getRandomInt(10000),
+        amount: '1.00',
+        currency: 'INR',
+        customer_id: req.body.customer_id||'cst_zdwpilklo6wa6sfa',
+        customer_email: req.body.customer_email||'amritpk@gmail.com',
+        return_url: req.body.return_url||'http://www.google.co.in',
+        'metadata.PAYPAL:last_name': 'gd',
+        'metadata.PAYPAL:landing_page': 'Billing',
+        'metadata.PAYPAL:country_code': 'IN',
+        'metadata.PAYPAL:additional_data': req.body.additional_data||'[{"key": "sender_account_id","value": "10001"},{"key":"sender_first_name","value": "John"},{"key": "sender_country_code","value": "US"},{"key": "sender_popularity_score","value": "low"}]',
+        'metadata.PAYPAL:phone_number': '7200058446',
+        'metadata.PAYPAL:experience_id':  req.body.experience_id||'XP-3NYT-KYZG-UY6Z-MXLN',
+        description: 'This is BA for Juspay merchant'} };
+  
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+      console.log(body);
+      console.log(JSON.parse(body));
+  
+      console.log(body);
+      res.send(body);
+      //let orderid=JSON.parse(body).order_id;
+     // console.log(orderid);
+    });
+});   
 app.post("/juspaycreate",function(req,res){
 //expects customer_id,customer_email,return_url,additional_data,experience_id
 //customer_id
 //risk_id
 if(req.body.security!="amrit"){
   res.send("security failed");
-  throw ("some error");
+  throw ("  ");
 }
   var options = { method: 'POST',
     url: 'https://sandbox.juspay.in/ecr/orders',
