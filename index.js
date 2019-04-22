@@ -38,6 +38,7 @@ app.post("/juspaycreateonly",function(req,res){
         'metadata.PAYPAL:additional_data': req.body.additional_data||'[{"key": "sender_account_id","value": "10001"},{"key":"sender_first_name","value": "John"},{"key": "sender_country_code","value": "US"},{"key": "sender_popularity_score","value": "low"}]',
         'metadata.PAYPAL:phone_number': '7200058446',
         'metadata.PAYPAL:experience_id':  req.body.experience_id||'XP-3NYT-KYZG-UY6Z-MXLN',
+        'options.get_client_auth_token': req.body.get_client_auth_token||true,
         description: 'This is BA for Juspay merchant'} };
   
     request(options, function (error, response, body) {
