@@ -23,6 +23,7 @@ app.post("/juspaycreateonly",function(req,res){
       headers: 
       { 'cache-control': 'no-cache',
         Authorization: 'Basic QzZFOEU2QkU3NkI0NEExQkUxMjA5QTg1Mjk4OEIwOg==',
+        Version:"2018-07-01",
         'Content-Type': 'application/x-www-form-urlencoded' },
       form: 
       { order_id: 'paypal_test_code_'+getRandomInt(10000),
