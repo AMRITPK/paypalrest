@@ -10,6 +10,25 @@ app.get('/', (req, res) => res.send('Hello World!'));
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+app.post("/juspaylistwallet",function(req,res){
+ 
+  let customer_id=req.body.customer_id||'cst_lv3lj1fkhwucpvcd';
+var options = { method: 'GET',
+  url: 'https://sandbox.juspay.in/customers/'+customer_id+'/wallets',
+  headers: 
+   { 'cache-control': 'no-cache',
+     Authorization: 'Basic QzZFOEU2QkU3NkI0NEExQkUxMjA5QTg1Mjk4OEIwOg==',
+     'Content-Type': 'application/x-www-form-urlencoded' },
+  form: false };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+  res.send(body);
+});
+
+})
 app.post("/juspaycreateonly",function(req,res){
   //expects customer_id,customer_email,return_url,additional_data,experience_id
   //customer_id
